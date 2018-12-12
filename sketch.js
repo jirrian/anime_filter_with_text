@@ -213,13 +213,6 @@ function addText(){
     let lefteye;
     let righteye;
 
-    for (let i = 0; i < poses.length; i++) {
-    // For each pose detected, loop through all the keypoints
-        pose = poses[i].pose;
-    
-        lefteye = pose.keypoints[1];
-        righteye = pose.keypoints[2];
-    }
     let soundEffectsInput = select('#soundEffects').value();
     textBubblesInput = select('#textBubbles').value();
     console.log(soundEffectsInput);
@@ -230,11 +223,24 @@ function addText(){
         console.log(textBubbles);
         //addBubbles(lefteye, righteye, textBubbles);
     }
-    if(soundEffectsInput != ""){
-        soundEffects = soundEffectsInput.split(',');
-        console.log(soundEffects);
-        addSounds(lefteye, righteye, soundEffects);
+
+    for (let i = 0; i < poses.length; i++) {
+    // For each pose detected, loop through all the keypoints
+        pose = poses[i].pose;
+    
+        lefteye = pose.keypoints[1];
+        righteye = pose.keypoints[2];
+
+        if(soundEffectsInput != ""){
+            soundEffects = soundEffectsInput.split(',');
+            console.log(soundEffects);
+            addSounds(lefteye, righteye, soundEffects);
+        }
     }
+
+
+
+    
 }
 
 function addSounds(left, right, array){
@@ -248,17 +254,17 @@ function addSounds(left, right, array){
     for(let j = 0; j < array.length; j++){
         let r = int(random(0, 2));
         if(r == 0 && left.score > 0.2){
-            text(array[j],left.position.x+random(60,150), left.position.y + random(-50,100));
+            text(array[j],left.position.x+random(60,100), left.position.y + random(-50,100));
         }
         else if(r == 1 && right.score > 0.2){
-            text(array[j],right.position.x-random(60,150), left.position.y + random(-50,100));
+            text(array[j],right.position.x-random(60,100), left.position.y + random(-50,100));
         }
     }
 
 
 }
 
-var i = 0;
+var i = 0; // need to reset this variable on button press
 function mousePressed(){
     if(textBubbles){
         if(i < textBubbles.length && textBubblesInput != "" && mouseX > 0 && mouseX < 500 && mouseY > 0 && mouseY < 500){
